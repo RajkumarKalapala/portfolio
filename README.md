@@ -1,20 +1,23 @@
-# Hi, I'm Rajkumar 👋
+Hi there, I'm Rajkumar 👋
 
-**BTech CSE 2026 Fresher | Python, Java, Node.js Full-Stack Developer**
+I'm a Full-Stack Developer who enjoys writing clean code and solving complex problems. My technical sweet spot lies in backend development and data-driven applications.
 
-- 🚀 Skilled in: Python (NumPy, Pandas, Scikit-learn, Matplotlib, Seaborn), Node.js + Express (Async), Java (OOPs), HTML/CSS/JS, Linux  
-- 💡 Built 4+ projects showcasing full-stack, data analysis & ML basics  
-- 🌍 Open to Software Engineer / Trainee roles across India  
-- 📫 Connect: [Your LinkedIn] | Email: your.email@gmail.com  
+What I bring to the table:
 
-**Pinned Projects** ↓
+    Core Stack: Python (NumPy, Pandas, Scikit-learn, Matplotlib, Seaborn), Node.js + Express, and Java (OOPs).
+
+    Web & Systems: HTML/CSS/JavaScript, plus a solid comfort level navigating Linux environments.
+
+    Career Focus: Actively exploring Software Engineer and Trainee opportunities anywhere in India. I'm ready to dive in, learn quickly, and contribute to a team.
 
 🛒 E-Commerce Web Application
 
-🔗 Live Demo: https://your-frontend.vercel.app
-🔗 Backend API: https://your-backend.onrender.com
-💻 Source Code: https://github.com/yourusername/ecommerce
+    🔗 Live Demo: https://your-frontend.vercel.app  
+    🔗 Backend API: https://your-backend.onrender.com  
+    💻 Source Code: https://github.com/RajkumarKalapala/portfolio/tree/main/ecommerce
 
-📫 Connect With Me
-🔗 LinkedIn: https://linkedin.com/in/rajkumar-kalapala-54927a37a
-📧 Email: rajkumarkalapala@outlook.com
+Let's connect:
+
+    📫 Email: rajkumarkalapala@outlook.com
+
+    💼 LinkedIn: https://linkedin.com/in/rajkumar-kalapala-54927a37a
