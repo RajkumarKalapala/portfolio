@@ -12,8 +12,8 @@ What I bring to the table:
 
 🛒 E-Commerce Web Application
 
-    🔗 Live Demo: https://your-frontend.vercel.app  
-    🔗 Backend API: https://your-backend.onrender.com  
+    🔗 Live Demo: https://ecommerce-frontend-five-lyart.vercel.app/ 
+    🔗 Backend API: https://ecommerce-backend-78e6.onrender.com
     💻 Source Code: https://github.com/RajkumarKalapala/portfolio/tree/main/ecommerce
 
 Let's connect:
