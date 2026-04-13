@@ -12,7 +12,7 @@ What I bring to the table:
 
 ## Projects (Built as BTech CSE Fresher – April 2026)
 
-- **E-commerce Full-Stack App** (Node.js + Express + MongoDB) → [Live Demo](https://ecommerce-frontend-five-lyart.vercel.app/)
+- **E-commerce Full-Stack App** (MERN Stack) → [Live Demo](https://ecommerce-frontend-five-lyart.vercel.app/)
 - **Java OOPs Bank Simulator** → [View Project](https://github.com/RajkumarKalapala/portfolio/tree/main/Java-BankAccountSimulation)
 - **Linux Security Bash Scripts** → [View Project](https://github.com/RajkumarKalapala/portfolio/tree/main/Security-bash-scripts)
 - **Private GPT (RAG + LLM)** → [View Project](https://github.com/RajkumarKalapala/portfolio/tree/main/private-gpt-main)
