@@ -1,5 +1,5 @@
 .venv
-# .env
+.env
 venv
 
 settings-me.yaml
@@ -35,4 +35,3 @@ models/
 
 tiktoken_cache/
 
-.env
