@@ -2,10 +2,11 @@
 name = "private-gpt"
 version = "1.0.0"
 description = "Private GPT"
-authors = "Rajkumar <rajkumarkalapala@outlook.com>"
+authors = ["Rajkumar <rajkumarkalapala@outlook.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
+packaging = ">=24.2"
 # PrivateGPT
 fastapi = { extras = ["all"], version = "^0.115.0" }
 python-multipart = "^0.0.10"
