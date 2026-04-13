@@ -16,6 +16,16 @@ What I bring to the table:
     🔗 Backend API: https://ecommerce-backend-78e6.onrender.com
     💻 Source Code: https://github.com/RajkumarKalapala/portfolio/tree/main/ecommerce
 
+🔐 Demo Credentials:
+
+👤 User Login:
+Email: demo@gmail.com  
+Password: Demo@123  
+
+👨‍💼 Admin Login:
+Email: admin@gmail.com  
+Password: Admin@123
+
 Let's connect:
 
     📫 Email: rajkumarkalapala@outlook.com
