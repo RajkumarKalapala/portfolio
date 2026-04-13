@@ -10,21 +10,12 @@ What I bring to the table:
 
     Career Focus: Actively exploring Software Engineer and Trainee opportunities anywhere in India. I'm ready to dive in, learn quickly, and contribute to a team.
 
-🛒 E-Commerce Web Application
+## Projects (Built as BTech CSE Fresher – April 2026)
 
-    🔗 Live Demo: https://ecommerce-frontend-five-lyart.vercel.app/ 
-    🔗 Backend API: https://ecommerce-backend-78e6.onrender.com
-    💻 Source Code: https://github.com/RajkumarKalapala/portfolio/tree/main/ecommerce
-
-🔐 Demo Credentials:
-
-👤 User Login:
-Email: demo@gmail.com  
-Password: Demo@123  
-
-👨‍💼 Admin Login:
-Email: admin@gmail.com  
-Password: Admin@123
+- **E-commerce Full-Stack App** (Node.js + Express + MongoDB) → [Live Demo](https://ecommerce-frontend-five-lyart.vercel.app/)
+- **Java OOPs Bank Simulator** → [View Project](https://github.com/RajkumarKalapala/portfolio/tree/main/Java-BankAccountSimulation)
+- **Linux Security Bash Scripts** → [View Project](https://github.com/RajkumarKalapala/portfolio/tree/main/Security-bash-scripts)
+- **Private GPT (RAG + LLM)** → [View Project](https://github.com/RajkumarKalapala/portfolio/tree/main/private-gpt-main)
 
 Let's connect:
 
