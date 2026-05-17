@@ -25,7 +25,7 @@ const projects = [
     impact: "Reduced camera downtime response time by giving IT teams a single pane of glass.",
     tech: ["Python", "Flask", "SQLite", "HTML5", "JavaScript", "Chart.js"],
     github: "https://github.com/RajkumarKalapala/portfolio",
-    demo: "https://cctv-monitoring-system-1yprg0lbv-rajkumarkalapalas-projects.vercel.app/",
+    demo: null,
     featured: true,
   },
   {
@@ -52,7 +52,7 @@ const projects = [
     impact: "Deployable out of the box — covers 90% of a standard online store's feature set.",
     tech: ["React", "Node.js", "Express", "MongoDB", "JWT", "Tailwind CSS"],
     github: "https://github.com/RajkumarKalapala/portfolio",
-    demo: "https://ecommerce-frontend-five-lyart.vercel.app/",
+    demo: null,
     featured: false,
   },
   {
