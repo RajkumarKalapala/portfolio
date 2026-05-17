@@ -132,6 +132,6 @@ cctv-monitor/
 
 ---
 
-Live Demo: cctv-monitoring-system-wheat.vercel.app
+Live Demo: [cctv-monitoring-system-wheat.vercel.app](https://cctv-monitoring-system-1yprg0lbv-rajkumarkalapalas-projects.vercel.app/)
 
 *Developed as part of IT Cell Internship Project 24 — Unified CCTV Monitoring Platform*
