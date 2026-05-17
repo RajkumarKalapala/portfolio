@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 import random, string, os, hashlib
 
 app = Flask(__name__, template_folder='../frontend/templates', static_folder='../frontend/static')
-app.secret_key = 'cctv_monitor_secret_2024'
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app.secret_key = 'cctv_monitor_secret_2026'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/cctv.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
