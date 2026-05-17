@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Live Dashboard{% endblock %}
+{% block content %}
+
+<div class="stat-grid" id="stat-grid">
+  <div class="stat-card blue"><div class="stat-label">Total Cameras</div><div class="stat-value" id="s-total">—</div><div class="stat-sub">Registered assets</div><i class="fas fa-video stat-icon"></i></div>
+  <div class="stat-card green"><div class="stat-label">Online</div><div class="stat-value" id="s-online">—</div><div class="stat-sub" id="s-uptime">—% uptime</div><i class="fas fa-check-circle stat-icon"></i></div>
+  <div class="stat-card red"><div class="stat-label">Offline</div><div class="stat-value" id="s-offline">—</div><div class="stat-sub">Need attention</div><i class="fas fa-times-circle stat-icon"></i></div>
+  <div class="stat-card yellow"><div class="stat-label">Intermittent</div><div class="stat-value" id="s-inter">—</div><div class="stat-sub">Unstable signal</div><i class="fas fa-exclamation-triangle stat-icon"></i></div>
+  <div class="stat-card red"><div class="stat-label">Open Tickets</div><div class="stat-value" id="s-tickets">—</div><div class="stat-sub" id="s-crit">— critical</div><i class="fas fa-ticket-alt stat-icon"></i></div>
+  <div class="stat-card yellow"><div class="stat-label">SIM Expiring</div><div class="stat-value" id="s-exp">—</div><div class="stat-sub">Within 30 days</div><i class="fas fa-sim-card stat-icon"></i></div>
+  <div class="stat-card purple"><div class="stat-label">Low Data</div><div class="stat-value" id="s-data">—</div><div class="stat-sub">≥85% data used</div><i class="fas fa-signal stat-icon"></i></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+  <!-- Zone Status -->
+  <div class="table-card">
+    <div class="table-header"><h3><i class="fas fa-map-signs" style="color:var(--accent);margin-right:8px"></i>Zone Status</h3></div>
+    <div id="zone-body" style="padding:12px 0"></div>
+  </div>
+  <!-- Alert Feed -->
+  <div class="table-card">
+    <div class="table-header"><h3><i class="fas fa-bell" style="color:var(--offline);margin-right:8px"></i>Alert Feed</h3></div>
+    <div id="alert-feed" style="padding:0 20px;max-height:320px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- Recent Cameras -->
+<div class="table-card">
+  <div class="table-header">
+    <h3><i class="fas fa-list" style="color:var(--accent);margin-right:8px"></i>Camera Overview</h3>
+    <a href="/cameras" style="font-size:.72rem;color:var(--accent);text-decoration:none">View all <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Camera ID</th><th>Location</th><th>Zone</th><th>Status</th><th>Signal</th><th>Data Usage</th><th>Last Seen</th></tr></thead>
+      <tbody id="cam-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+function signalBars(pct){
+  const bars=4;const active=Math.round(pct/100*bars);
+  const cls=pct<25?'bad':pct<60?'warn':'active';
+  let h='<div class="signal-bar">';
+  for(let i=0;i<bars;i++){
+    const ht=(i+1)*4+8;
+    h+=`<span style="height:${ht}px" class="${i<active?cls:''}"></span>`;
+  }
+  return h+'</div>';
+}
+function progBar(used,limit){
+  const pct=Math.min(100,used/limit*100);
+  const cls=pct>=90?'prog-crit':pct>=70?'prog-warn':'prog-ok';
+  return `<div class="prog-wrap"><div class="prog-track"><div class="prog-fill ${cls}" style="width:${pct}%"></div></div><div class="prog-label">${pct.toFixed(0)}%</div></div>`;
+}
+function statusBadge(s){
+  const m={Online:'online',Offline:'offline',Intermittent:'inter'};
+  const dot={Online:'🟢',Offline:'🔴',Intermittent:'🟡'};
+  return `<span class="badge badge-${m[s]||'inter'}">${dot[s]||''} ${s}</span>`;
+}
+
+function loadSummary(){
+  fetch('/api/summary').then(r=>r.json()).then(d=>{
+    document.getElementById('s-total').textContent=d.total;
+    document.getElementById('s-online').textContent=d.online;
+    document.getElementById('s-uptime').textContent=d.uptime_pct+'% uptime';
+    document.getElementById('s-offline').textContent=d.offline;
+    document.getElementById('s-inter').textContent=d.intermittent;
+    document.getElementById('s-tickets').textContent=d.open_tickets;
+    document.getElementById('s-crit').textContent=d.critical+' critical';
+    document.getElementById('s-exp').textContent=d.expiring_sims;
+    document.getElementById('s-data').textContent=d.low_data;
+  });
+}
+
+function loadZones(){
+  fetch('/api/zone_stats').then(r=>r.json()).then(d=>{
+    let h='';
+    for(const [zone,s] of Object.entries(d)){
+      const pct=s.total?Math.round(s.online/s.total*100):0;
+      h+=`<div style="padding:12px 20px;border-bottom:1px solid rgba(30,58,95,.4)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:.8rem;font-weight:600;color:var(--white)">${zone}</span>
+          <span style="font-family:var(--mono);font-size:.7rem;color:var(--text2)">${s.online}/${s.total}</span>
+        </div>
+        <div class="prog-track" style="margin-bottom:4px"><div class="prog-fill ${pct>=80?'prog-ok':pct>=50?'prog-warn':'prog-crit'}" style="width:${pct}%"></div></div>
+        <div style="display:flex;gap:12px;font-size:.65rem;color:var(--text2)">
+          <span style="color:var(--online)">● ${s.online} online</span>
+          <span style="color:var(--offline)">● ${s.offline} offline</span>
+          <span style="color:var(--inter)">● ${s.inter} inter.</span>
+        </div>
+      </div>`;
+    }
+    document.getElementById('zone-body').innerHTML=h;
+  });
+}
+
+function loadCameras(){
+  fetch('/api/cameras').then(r=>r.json()).then(cams=>{
+    const alerts=[];
+    const rows=cams.slice(0,8).map(c=>`
+      <tr>
+        <td><span style="font-family:var(--mono);color:var(--accent)">${c.camera_id}</span></td>
+        <td>${c.location}</td>
+        <td><span style="font-size:.72rem;color:var(--text2)">${c.zone}</span></td>
+        <td>${statusBadge(c.status)}</td>
+        <td>${signalBars(c.signal)}</td>
+        <td>${progBar(c.data_used,c.data_limit)}</td>
+        <td><span style="font-size:.72rem;font-family:var(--mono);color:var(--text2)">${c.last_seen}</span></td>
+      </tr>`).join('');
+    document.getElementById('cam-tbody').innerHTML=rows;
+
+    // Build alerts
+    cams.forEach(c=>{
+      if(c.status==='Offline') alerts.push({type:'offline',cam:c.camera_id,msg:`${c.location} — OFFLINE`,time:c.last_seen});
+      if(c.data_pct>=90) alerts.push({type:'data',cam:c.camera_id,msg:`${c.camera_id} — Data ${c.data_pct}% used`,time:''});
+      const exp=new Date(c.sim_expiry);const today=new Date();
+      const days=Math.round((exp-today)/(1000*86400));
+      if(days<30&&days>=0) alerts.push({type:'sim',cam:c.camera_id,msg:`${c.camera_id} — SIM expires in ${days}d`,time:''});
+    });
+    const colors={offline:'var(--offline)',data:'var(--inter)',sim:'var(--accent2)'};
+    const icons={offline:'fa-video-slash',data:'fa-database',sim:'fa-sim-card'};
+    document.getElementById('alert-feed').innerHTML=alerts.length?
+      alerts.map(a=>`<div style="display:flex;gap:10px;padding:11px 0;border-bottom:1px solid rgba(30,58,95,.4);align-items:flex-start">
+        <i class="fas ${icons[a.type]}" style="color:${colors[a.type]};margin-top:2px;font-size:.85rem;min-width:16px"></i>
+        <div><div style="font-size:.78rem;color:var(--text)">${a.msg}</div>${a.time?`<div style="font-size:.65rem;font-family:var(--mono);color:var(--text2)">${a.time}</div>`:''}</div>
+      </div>`).join(''):
+      '<div style="padding:20px;text-align:center;color:var(--text2);font-size:.8rem">No active alerts</div>';
+  });
+}
+
+function onRefresh(){loadSummary();loadZones();loadCameras();}
+onRefresh();
+setInterval(onRefresh,30000);
+</script>
+{% endblock %}

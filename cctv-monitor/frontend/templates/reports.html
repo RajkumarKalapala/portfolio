@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block title %}Reports{% endblock %}
+{% block page_title %}Analytics & Reports{% endblock %}
+{% block content %}
+<style>
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-card h3{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:180px;padding-top:10px}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar-stack{width:100%;display:flex;flex-direction:column;justify-content:flex-end;border-radius:6px 6px 0 0;overflow:hidden;min-height:4px}
+.bar-label{font-size:.62rem;color:var(--text2);text-align:center;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.bar-val{font-size:.65rem;font-family:var(--mono);color:var(--text2);margin-bottom:2px}
+.donut-wrap{display:flex;align-items:center;gap:24px}
+.donut-legend{display:flex;flex-direction:column;gap:10px}
+.donut-item{display:flex;align-items:center;gap:10px;font-size:.78rem}
+.donut-swatch{width:12px;height:12px;border-radius:3px}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.kpi-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.kpi-val{font-size:1.6rem;font-weight:900;font-family:var(--mono);color:var(--white)}
+.kpi-label{font-size:.68rem;color:var(--text2);letter-spacing:.1em;margin-top:4px}
+.download-btn{background:rgba(0,196,255,.1);border:1px solid var(--accent);color:var(--accent);
+  padding:7px 16px;border-radius:8px;font-size:.75rem;cursor:pointer;font-weight:600;
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:all .2s}
+.download-btn:hover{background:rgba(0,196,255,.2)}
+</style>
+
+<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+  <button class="download-btn" onclick="downloadReport()"><i class="fas fa-download"></i> Download CSV Report</button>
+</div>
+
+<div class="kpi-grid" id="kpi-grid">
+  <div class="kpi-card"><div class="kpi-val" id="kpi-uptime">—%</div><div class="kpi-label">OVERALL UPTIME</div></div>
+  <div class="kpi-card"><div class="kpi-val" id="kpi-offline">—</div><div class="kpi-label">CAMERAS OFFLINE NOW</div></div>
+  <div class="kpi-card"><div class="kpi-val" id="kpi-tickets">—</div><div class="kpi-label">OPEN TICKETS</div></div>
+  <div class="kpi-card"><div class="kpi-val" id="kpi-critical">—</div><div class="kpi-label">CRITICAL ISSUES</div></div>
+  <div class="kpi-card"><div class="kpi-val" id="kpi-sim">—</div><div class="kpi-label">SIMs EXPIRING SOON</div></div>
+  <div class="kpi-card"><div class="kpi-val" id="kpi-data">—</div><div class="kpi-label">LOW DATA ALERTS</div></div>
+</div>
+
+<div class="report-grid">
+  <div class="chart-card">
+    <h3><i class="fas fa-chart-bar" style="color:var(--accent)"></i>Zone-wise Status</h3>
+    <div class="bar-chart" id="zone-chart"></div>
+  </div>
+  <div class="chart-card">
+    <h3><i class="fas fa-signal" style="color:var(--inter)"></i>SIM Provider Distribution</h3>
+    <div class="donut-wrap" id="provider-chart"></div>
+  </div>
+</div>
+
+<div class="report-grid">
+  <div class="chart-card">
+    <h3><i class="fas fa-database" style="color:var(--online)"></i>Data Usage by Zone (GB)</h3>
+    <div class="bar-chart" id="data-chart"></div>
+  </div>
+  <div class="chart-card">
+    <h3><i class="fas fa-ticket-alt" style="color:var(--offline)"></i>Ticket Priority Breakdown</h3>
+    <div id="ticket-breakdown" style="padding:10px 0"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let camData=[];
+
+function loadAll(){
+  Promise.all([fetch('/api/cameras').then(r=>r.json()),fetch('/api/summary').then(r=>r.json()),
+    fetch('/api/tickets').then(r=>r.json()),fetch('/api/zone_stats').then(r=>r.json())])
+  .then(([cams,summary,tickets,zones])=>{
+    camData=cams;
+    // KPIs
+    document.getElementById('kpi-uptime').textContent=summary.uptime_pct+'%';
+    document.getElementById('kpi-offline').textContent=summary.offline;
+    document.getElementById('kpi-tickets').textContent=summary.open_tickets;
+    document.getElementById('kpi-critical').textContent=summary.critical;
+    document.getElementById('kpi-sim').textContent=summary.expiring_sims;
+    document.getElementById('kpi-data').textContent=summary.low_data;
+
+    // Zone chart
+    const maxTotal=Math.max(...Object.values(zones).map(z=>z.total));
+    document.getElementById('zone-chart').innerHTML=Object.entries(zones).map(([z,s])=>{
+      const pct=maxTotal?s.total/maxTotal*100:0;
+      const onH=s.total?s.online/s.total*100:0;
+      const offH=s.total?s.offline/s.total*100:0;
+      const intH=s.total?s.inter/s.total*100:0;
+      return `<div class="bar-group">
+        <div class="bar-val">${s.total}</div>
+        <div class="bar-stack" style="height:${pct*1.4}px">
+          <div style="background:var(--inter);height:${intH}%;"></div>
+          <div style="background:var(--offline);height:${offH}%;"></div>
+          <div style="background:var(--online);height:${onH}%;flex:1;min-height:4px"></div>
+        </div>
+        <div class="bar-label">${z.replace(' Zone','')}</div>
+      </div>`;
+    }).join('');
+
+    // Provider donut (SVG)
+    const providers={};
+    cams.forEach(c=>{providers[c.sim_provider]=(providers[c.sim_provider]||0)+1;});
+    const colors=['#00c4ff','#00ff9d','#ffb830','#7b2fff'];
+    const total=cams.length;
+    let svgParts='',startAngle=-90,i=0;
+    const legend=[];
+    for(const [name,count] of Object.entries(providers)){
+      const angle=count/total*360;
+      const r=80;const cx=100;const cy=100;
+      const startR=startAngle*Math.PI/180;
+      const endR=(startAngle+angle)*Math.PI/180;
+      const x1=cx+r*Math.cos(startR),y1=cy+r*Math.sin(startR);
+      const x2=cx+r*Math.cos(endR),y2=cy+r*Math.sin(endR);
+      const lg=angle>180?1:0;
+      svgParts+=`<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} Z" fill="${colors[i%colors.length]}" opacity="0.85"/>`;
+      legend.push(`<div class="donut-item"><div class="donut-swatch" style="background:${colors[i%colors.length]}"></div>${name}: <strong style="color:var(--white)">${count}</strong></div>`);
+      startAngle+=angle; i++;
+    }
+    document.getElementById('provider-chart').innerHTML=
+      `<svg viewBox="0 0 200 200" width="180" height="180"><circle cx="100" cy="100" r="55" fill="var(--bg3)"/>${svgParts}</svg>
+       <div class="donut-legend">${legend.join('')}</div>`;
+
+    // Data usage by zone
+    const zoneData={};
+    cams.forEach(c=>{zoneData[c.zone]=(zoneData[c.zone]||0)+c.data_used;});
+    const maxD=Math.max(...Object.values(zoneData));
+    document.getElementById('data-chart').innerHTML=Object.entries(zoneData).map(([z,d])=>{
+      const pct=maxD?d/maxD*100:0;
+      return `<div class="bar-group">
+        <div class="bar-val">${d.toFixed(1)}</div>
+        <div class="bar-stack" style="height:${pct*1.4}px;background:var(--inter)"></div>
+        <div class="bar-label">${z.replace(' Zone','')}</div>
+      </div>`;
+    }).join('');
+
+    // Ticket breakdown
+    const prioCount={Critical:0,High:0,Medium:0,Low:0};
+    tickets.forEach(t=>{if(prioCount[t.priority]!==undefined)prioCount[t.priority]++;});
+    const prioColors={Critical:'var(--offline)',High:'#ff6432',Medium:'var(--inter)',Low:'var(--accent)'};
+    const maxP=Math.max(...Object.values(prioCount),1);
+    document.getElementById('ticket-breakdown').innerHTML=Object.entries(prioCount).map(([p,n])=>`
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="width:70px;font-size:.75rem;color:${prioColors[p]};font-weight:600">${p}</div>
+        <div class="prog-track" style="flex:1"><div class="prog-fill" style="width:${n/maxP*100}%;background:${prioColors[p]}"></div></div>
+        <div style="font-family:var(--mono);font-size:.75rem;color:var(--text2);min-width:24px;text-align:right">${n}</div>
+      </div>`).join('');
+  });
+}
+
+function downloadReport(){
+  const rows=[['Camera ID','Location','Zone','Status','Provider','SIM Number','Signal%','Data Used GB','Data Limit GB','SIM Expiry','Last Seen','IP']];
+  camData.forEach(c=>rows.push([c.camera_id,c.location,c.zone,c.status,c.sim_provider,c.sim_number,c.signal,c.data_used,c.data_limit,c.sim_expiry,c.last_seen,c.ip_address]));
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='cctv_report_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+function onRefresh(){loadAll();}
+loadAll();
+</script>
+{% endblock %}

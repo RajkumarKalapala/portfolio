@@ -1,0 +1,7 @@
+# USBLOCKR – Python Dependencies
+# Install with:  pip install -r requirements.txt
+
+opencv-python       # webcam snapshot (intruder detection)
+Pillow              # image handling
+pywin32             # Windows WMI / registry access (wmi module)
+wmi                 # USB device monitoring on Windows

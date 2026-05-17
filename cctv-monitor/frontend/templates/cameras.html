@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% block title %}Cameras{% endblock %}
+{% block page_title %}Camera Management{% endblock %}
+{% block content %}
+
+<div class="filter-bar">
+  <input type="text" id="search" placeholder="🔍 Search camera, location, SIM..." oninput="filterCams()">
+  <select id="fStatus" onchange="filterCams()">
+    <option value="">All Status</option>
+    <option>Online</option><option>Offline</option><option>Intermittent</option>
+  </select>
+  <select id="fZone" onchange="filterCams()">
+    <option value="">All Zones</option>
+    <option>North Zone</option><option>South Zone</option><option>East Zone</option><option>West Zone</option><option>Central Zone</option>
+  </select>
+  <select id="fProvider" onchange="filterCams()">
+    <option value="">All Providers</option>
+    <option>Airtel</option><option>Jio</option><option>BSNL</option><option>Vi</option>
+  </select>
+</div>
+
+<div class="table-card">
+  <div class="table-header">
+    <h3 id="cam-count"><i class="fas fa-camera" style="color:var(--accent);margin-right:8px"></i>All Cameras</h3>
+    <span style="font-size:.72rem;color:var(--text2)" id="last-refresh">—</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Camera ID</th><th>Location / Zone</th><th>Status</th>
+          <th>Provider</th><th>Signal</th><th>Data Usage</th>
+          <th>SIM Expiry</th><th>Last Seen</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="cam-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal" style="width:600px">
+    <h3><i class="fas fa-info-circle" style="color:var(--accent)"></i> Camera Details</h3>
+    <div id="modal-detail-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="openTicketFromDetail()"><i class="fas fa-ticket-alt"></i> Raise Ticket</button>
+      <button class="btn btn-ghost" onclick="closeModal('detailModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ticket Modal -->
+<div class="modal-overlay" id="ticketModal">
+  <div class="modal">
+    <h3><i class="fas fa-ticket-alt" style="color:var(--accent)"></i> Raise Repair Ticket</h3>
+    <div class="form-group"><label>Camera ID</label><input id="t-camid" readonly></div>
+    <div class="form-group"><label>Issue Description</label>
+      <select id="t-issue">
+        <option>Camera offline</option><option>SIM data exhausted</option><option>Signal weak</option>
+        <option>Connection intermittent</option><option>Physical damage reported</option><option>SIM expiry alert</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Priority</label>
+      <select id="t-priority"><option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option></select>
+    </div>
+    <div class="form-group"><label>Assign To</label>
+      <select id="t-assign"><option>Team Alpha</option><option>Team Beta</option><option>Team Gamma</option></select>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="t-notes" rows="3" placeholder="Additional notes..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="submitTicket()">Create Ticket</button>
+      <button class="btn btn-ghost" onclick="closeModal('ticketModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+let allCams=[];
+let selectedCamId=null;
+
+function signalBars(pct){
+  const bars=4;const active=Math.round(pct/100*bars);
+  const cls=pct<25?'bad':pct<60?'warn':'active';
+  let h='<div class="signal-bar">';
+  for(let i=0;i<bars;i++){const ht=(i+1)*4+8;h+=`<span style="height:${ht}px" class="${i<active?cls:''}"></span>`;}
+  return h+'</div>';
+}
+function progBar(used,limit){
+  const pct=Math.min(100,used/limit*100);
+  const cls=pct>=90?'prog-crit':pct>=70?'prog-warn':'prog-ok';
+  return `<div class="prog-wrap"><div class="prog-track"><div class="prog-fill ${cls}" style="width:${pct}%"></div></div><div class="prog-label">${pct.toFixed(0)}%</div></div>`;
+}
+function statusBadge(s){const m={Online:'online',Offline:'offline',Intermittent:'inter'};const dot={Online:'🟢',Offline:'🔴',Intermittent:'🟡'};return `<span class="badge badge-${m[s]||'inter'}">${dot[s]||''} ${s}</span>`;}
+
+function expiryBadge(dateStr){
+  const exp=new Date(dateStr);const today=new Date();
+  const days=Math.round((exp-today)/(1000*86400));
+  if(days<0) return `<span style="color:var(--offline);font-size:.72rem;font-family:var(--mono)">EXPIRED</span>`;
+  if(days<30) return `<span style="color:var(--inter);font-size:.72rem;font-family:var(--mono)">${days}d left</span>`;
+  return `<span style="color:var(--text2);font-size:.72rem;font-family:var(--mono)">${dateStr}</span>`;
+}
+
+function renderTable(cams){
+  const tbody=document.getElementById('cam-tbody');
+  tbody.innerHTML=cams.map(c=>`
+    <tr>
+      <td><span style="font-family:var(--mono);color:var(--accent);cursor:pointer" onclick="showDetail('${c.camera_id}')">${c.camera_id}</span><br><span style="font-size:.65rem;color:var(--text2)">${c.model||''}</span></td>
+      <td><div style="font-size:.8rem">${c.location}</div><div style="font-size:.65rem;color:var(--text2)">${c.zone}</div></td>
+      <td>${statusBadge(c.status)}</td>
+      <td><span style="font-size:.75rem">${c.sim_provider}</span><br><span style="font-size:.63rem;font-family:var(--mono);color:var(--text2)">${c.sim_number}</span></td>
+      <td>${signalBars(c.signal)}<span style="font-size:.65rem;font-family:var(--mono);color:var(--text2)">${c.signal}%</span></td>
+      <td>${progBar(c.data_used,c.data_limit)}<span style="font-size:.63rem;font-family:var(--mono);color:var(--text2)">${c.data_used}/${c.data_limit} GB</span></td>
+      <td>${expiryBadge(c.sim_expiry)}</td>
+      <td><span style="font-size:.7rem;font-family:var(--mono);color:var(--text2)">${c.last_seen}</span></td>
+      <td><button onclick="openTicket('${c.camera_id}')" style="background:rgba(0,196,255,.1);border:1px solid var(--accent);color:var(--accent);padding:5px 10px;border-radius:6px;font-size:.7rem;cursor:pointer;white-space:nowrap"><i class="fas fa-ticket-alt"></i> Ticket</button></td>
+    </tr>`).join('');
+  document.getElementById('cam-count').innerHTML=`<i class="fas fa-camera" style="color:var(--accent);margin-right:8px"></i>Cameras (${cams.length})`;
+  document.getElementById('last-refresh').textContent='Last refreshed: '+new Date().toLocaleTimeString('en-IN');
+}
+
+function filterCams(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const st=document.getElementById('fStatus').value;
+  const zo=document.getElementById('fZone').value;
+  const pr=document.getElementById('fProvider').value;
+  renderTable(allCams.filter(c=>{
+    if(q&&!`${c.camera_id} ${c.location} ${c.sim_number}`.toLowerCase().includes(q)) return false;
+    if(st&&c.status!==st) return false;
+    if(zo&&c.zone!==zo) return false;
+    if(pr&&c.sim_provider!==pr) return false;
+    return true;
+  }));
+}
+
+function loadCams(){
+  fetch('/api/cameras').then(r=>r.json()).then(d=>{allCams=d;filterCams();});
+}
+
+function showDetail(camId){
+  const c=allCams.find(x=>x.camera_id===camId);if(!c)return;
+  selectedCamId=camId;
+  const exp=new Date(c.sim_expiry);const days=Math.round((exp-new Date())/(1000*86400));
+  document.getElementById('modal-detail-body').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      ${[['Camera ID',c.camera_id],['Model',c.model],['Location',c.location],['Zone',c.zone],
+         ['Status',c.status],['IP Address',c.ip_address],['SIM Number',c.sim_number],['Provider',c.sim_provider],
+         ['Signal',c.signal+'%'],['Data Used',c.data_used+' / '+c.data_limit+' GB'],
+         ['SIM Expiry',c.sim_expiry+(days<30?' ('+days+'d left)':'')],['Last Seen',c.last_seen]
+        ].map(([k,v])=>`<div style="background:var(--bg3);border-radius:8px;padding:12px">
+          <div style="font-size:.63rem;color:var(--text2);letter-spacing:.12em;font-weight:700;margin-bottom:4px">${k.toUpperCase()}</div>
+          <div style="font-size:.82rem;color:var(--white);font-family:var(--mono)">${v}</div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function openTicketFromDetail(){
+  closeModal('detailModal');
+  openTicket(selectedCamId);
+}
+
+function openTicket(camId){
+  document.getElementById('t-camid').value=camId;
+  const c=allCams.find(x=>x.camera_id===camId);
+  if(c&&c.status==='Offline') document.getElementById('t-priority').value='High';
+  document.getElementById('ticketModal').classList.add('open');
+}
+
+function submitTicket(){
+  const payload={
+    camera_id:document.getElementById('t-camid').value,
+    issue:document.getElementById('t-issue').value,
+    priority:document.getElementById('t-priority').value,
+    assigned_to:document.getElementById('t-assign').value,
+    notes:document.getElementById('t-notes').value
+  };
+  fetch('/api/tickets/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(r=>r.json()).then(d=>{
+      if(d.success){alert('Ticket '+d.ticket_id+' created!');closeModal('ticketModal');}
+    });
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function onRefresh(){loadCams();}
+loadCams();
+</script>
+{% endblock %}

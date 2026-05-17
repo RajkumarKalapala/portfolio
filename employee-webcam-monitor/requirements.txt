@@ -1,0 +1,6 @@
+# Core (always required)
+Pillow>=9.0.0
+
+# Optional but recommended
+opencv-python>=4.5.0   # For live webcam preview and face capture
+face-recognition>=1.3.0  # For face recognition (requires dlib → see README)
