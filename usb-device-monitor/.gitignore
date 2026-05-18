@@ -55,7 +55,6 @@ htmlcov/
 *.mp4
 *.avi
 *.jpg
-*.png
 
 # Windows batch generated outputs
 *.bat.bak
