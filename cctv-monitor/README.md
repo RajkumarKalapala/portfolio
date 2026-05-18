@@ -1,137 +1,276 @@
-# CCTV Unified Monitoring Platform — IT Cell
+<div align="center">
 
-A centralized web application to monitor SIM-based CCTV cameras deployed across a city.
+# CCTV Unified Monitor Dashboard
 
----
+![Python](https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python)
+![Flask](https://img.shields.io/badge/Backend-Flask-black?style=for-the-badge&logo=flask)
+![Monitoring](https://img.shields.io/badge/System-CCTV_Monitoring-green?style=for-the-badge)
+![Dashboard](https://img.shields.io/badge/UI-Live_Dashboard-purple?style=for-the-badge)
+![Status](https://img.shields.io/badge/Project-Completed-success?style=for-the-badge)
 
-## Features
+</div>
 
-| Module | Description |
-|--------|-------------|
-| **Live Dashboard** | Real-time online/offline/intermittent status with auto-refresh every 30s |
-| **Camera Management** | Full table with filtering by status, zone, provider; click to view details |
-| **Geo Map** | SVG-based city map with hover tooltips for each camera |
-| **Ticket System** | Raise and update repair tickets with priority and team assignment |
-| **Reports & Analytics** | Zone-wise charts, provider distribution, data usage, CSV export |
-| **Role-based Login** | Admin / Operator / Viewer roles |
+# Project Overview
 
----
+CCTV Unified Monitor Dashboard is a modern real-time surveillance and monitoring platform designed for centralized CCTV management, incident monitoring, alert tracking, geo-mapping, and analytics reporting.
 
-## Setup & Run (Step-by-Step)
-
-### Prerequisites
-- Python 3.9 or above
-- pip (Python package manager)
+The platform simulates enterprise-level CCTV infrastructure management systems commonly used in smart cities, IT monitoring centers, transportation systems, and government surveillance operations.
 
 ---
 
-### Step 1: Install Python (if not installed)
-Download from https://www.python.org/downloads/
-During installation on Windows — check ✅ "Add Python to PATH"
+# Live Dashboard
+
+The central monitoring dashboard used for real-time camera analytics, alert management, and zone monitoring.
+
+![Main Dashboard](screenshots/01_main_dashboard.png)
 
 ---
 
-### Step 2: Open Terminal / Command Prompt
-- **Windows**: Press `Win + R`, type `cmd`, press Enter
-- **Mac/Linux**: Open Terminal app
+# Core Features
+
+- Real-time CCTV monitoring dashboard
+- Live camera status tracking
+- Zone-based monitoring system
+- Incident & ticket management
+- Geo-location mapping
+- Alert feed monitoring
+- Camera uptime analytics
+- Offline/intermittent camera detection
+- Reports & analytics dashboard
+- Modern responsive UI
+- Administrative monitoring controls
 
 ---
 
-### Step 3: Navigate to the project folder
-```bash
-cd path/to/cctv-monitor
+# Camera Monitoring System
+
+Displays live camera monitoring panels, camera statuses, and surveillance controls.
+
+![Camera Monitoring](screenshots/02_camera_monitoring.png)
+
+---
+
+# Geo Mapping System
+
+Visualizes surveillance locations and monitoring zones through integrated geo-mapping functionality.
+
+![Geo Map](screenshots/03_geo_map.png)
+
+---
+
+# Incident & Ticket Management
+
+Tracks incidents, camera failures, alerts, and operational issues through a ticket management system.
+
+![Incident Tickets](screenshots/04_incident_tickets.png)
+
+---
+
+# Analytics & Reports Dashboard
+
+Displays monitoring analytics, uptime statistics, camera reports, and operational insights.
+
+![Reports Dashboard](screenshots/05_reports_dashboard.png)
+
+---
+
+# Alert Feed Monitoring
+
+Real-time alert feed used to track critical events, offline cameras, and monitoring issues.
+
+![Alert Feed](screenshots/06_alert_feed.png)
+
+---
+
+# Zone Monitoring System
+
+Shows operational status of surveillance zones and camera distribution across multiple locations.
+
+![Zone Monitoring](screenshots/07_zone_monitoring.png)
+
+---
+
+# Responsive Mobile Dashboard
+
+Responsive mobile-friendly version of the monitoring dashboard.
+
+![Mobile Dashboard](screenshots/08_mobile_dashboard.png)
+
+---
+
+# Backend Execution
+
+Backend services and monitoring systems running successfully.
+
+![Backend Running](screenshots/09_backend_running.png)
+
+---
+
+# System Architecture
+
+High-level workflow and architecture of the CCTV monitoring platform.
+
+![System Architecture](screenshots/10_system_architecture.png)
+
+---
+
+# Application Demo
+
+Animated demonstration of dashboard monitoring, analytics tracking, geo mapping, and incident management workflows.
+
+![Demo](screenshots/11_demo.gif)
+
+---
+
+# Technology Stack
+
+## Frontend
+- HTML5
+- CSS3
+- JavaScript
+
+## Backend
+- Python
+- Flask
+
+## Dashboard Components
+- Real-Time Monitoring
+- Analytics Dashboard
+- Incident Tracking
+- Alert Feed System
+
+## Monitoring Features
+- CCTV Monitoring
+- Geo Mapping
+- Zone Analytics
+- Ticket Management
+
+---
+
+# Workflow
+
+```text
+CCTV Cameras
+ ↓
+Monitoring System
+ ↓
+Flask Backend
+ ↓
+Alert Engine
+ ↓
+Geo Mapping
+ ↓
+Dashboard Analytics
+ ↓
+Reports & Tickets
 ```
-Example: `cd C:\Users\YourName\Downloads\cctv-monitor`
 
 ---
 
-### Step 4: Install dependencies
+# Use Cases
+
+- Smart city monitoring systems
+- Transportation surveillance dashboards
+- Enterprise CCTV management
+- IT monitoring centers
+- Security analytics systems
+- Incident management workflows
+- Government surveillance simulations
+
+---
+
+# Folder Structure
+
+```text
+CCTV-Unified-Monitor/
+│
+├── screenshots/
+│   ├── 01_main_dashboard.png
+│   ├── 02_camera_monitoring.png
+│   ├── 03_geo_map.png
+│   ├── 04_incident_tickets.png
+│   ├── 05_reports_dashboard.png
+│   ├── 06_alert_feed.png
+│   ├── 07_zone_monitoring.png
+│   ├── 08_mobile_dashboard.png
+│   ├── 09_backend_running.png
+│   ├── 10_system_architecture.png
+│   └── 11_demo.gif
+│
+├── templates/
+├── static/
+├── README.md
+├── requirements.txt
+└── app.py
+```
+
+---
+
+# Installation
+
+## Clone Repository
+
+```bash
+git clone <your-repository-url>
+```
+
+---
+
+## Navigate to Project Directory
+
+```bash
+cd CCTV-Unified-Monitor
+```
+
+---
+
+## Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
-This installs Flask and Flask-SQLAlchemy.
 
 ---
 
-### Step 5: Run the application
+## Run Application
+
 ```bash
-python run.py
+python app.py
 ```
 
----
+## DEFAULT LOGIN CREDENTIALS
 
-### Step 6: Open in browser
-Go to: **http://127.0.0.1:5000**
-
----
-
-## Login Credentials (Demo)
-
-| Username | Password | Role |
-|----------|----------|------|
-| `admin` | `admin123` | Full access |
-| `operator` | `op123` | Operational access |
-| `viewer` | `view123` | Read-only |
+| Username | Password  |   Role   |
+|----------|-----------|----------|
+| admin    | admin123  | Admin    |
+| operator | op123     | Operator |
+| viewer   | view123   | Viewwer  |
 
 ---
 
-## Project Structure
+# Future Improvements
 
-```
-cctv-monitor/
-├── run.py                    ← Start the app here
-├── requirements.txt
-├── backend/
-│   └── app.py                ← Flask app, database models, API routes
-├── frontend/
-│   └── templates/
-│       ├── base.html         ← Layout with sidebar & topbar
-│       ├── login.html
-│       ├── dashboard.html
-│       ├── cameras.html
-│       ├── tickets.html
-│       ├── map.html
-│       └── reports.html
-└── data/
-    └── cctv.db               ← SQLite database (auto-created on first run)
-```
+- AI-based threat detection
+- Real-time video streaming
+- Face recognition integration
+- Cloud monitoring support
+- SMS/email alert notifications
+- Multi-admin support
+- Camera recording playback
+- Advanced analytics engine
+- Mobile application integration
 
 ---
 
-## API Endpoints
+# Author
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/summary` | GET | Dashboard KPI summary |
-| `/api/cameras` | GET | All camera data |
-| `/api/tickets` | GET | All tickets |
-| `/api/tickets/create` | POST | Create new ticket |
-| `/api/tickets/update` | POST | Update ticket status |
-| `/api/zone_stats` | GET | Per-zone breakdown |
-| `/api/simulate_refresh` | GET | Simulate live status changes |
+Rajkumar Kalapala
+
+Cybersecurity & AI Enthusiast  
+Python Developer | Monitoring Systems | Dashboard Engineering
 
 ---
 
-## Extending This Project
+# License
 
-- **Real SIM API**: Replace simulated data in `app.py` with actual SIM provider API calls (Airtel, Jio, BSNL APIs)
-- **Real Camera Ping**: Add `subprocess.run(['ping', camera_ip])` logic in a background thread
-- **Email Alerts**: Use `smtplib` to send alerts when cameras go offline > threshold
-- **PostgreSQL**: Change `SQLALCHEMY_DATABASE_URI` to `postgresql://user:pass@host/db`
-- **RFID Asset Tagging**: Add asset_tag field to Camera model and scan integration
-- **Authentication**: Replace simple hash auth with Flask-Login + JWT for production
-
----
-
-## Tech Stack
-- **Backend**: Python + Flask + Flask-SQLAlchemy
-- **Database**: SQLite (upgradeable to PostgreSQL)
-- **Frontend**: HTML5 + CSS3 + Vanilla JS (no heavy frameworks needed)
-- **Fonts**: Exo 2 + Share Tech Mono (Google Fonts)
-- **Icons**: Font Awesome 6
-
----
-
-Live Demo: [cctv-monitoring-system-wheat.vercel.app](https://cctv-monitoring-system-1yprg0lbv-rajkumarkalapalas-projects.vercel.app/)
-
-*Developed as part of IT Cell Internship Project 24 — Unified CCTV Monitoring Platform*
+This project is created for educational and demonstration purposes.
