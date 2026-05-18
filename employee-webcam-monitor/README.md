@@ -240,6 +240,11 @@ pip install -r requirements.txt
 python main.py
 ```
 
+## Default Login
+| Username | Password  | Role  |
+|----------|-----------|-------|
+| admin    | Admin@123 | Admin |
+
 ---
 
 # Author
