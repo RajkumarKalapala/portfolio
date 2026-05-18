@@ -1,5 +1,3 @@
-# Webcam Spyware Security System
-
 <h1 align="center">
 Webcam Spyware Security System
 </h1>
