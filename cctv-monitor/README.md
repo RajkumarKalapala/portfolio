@@ -262,6 +262,8 @@ python app.py
 
 ---
 
+- Live Demo: https://cctv-monitoring-system-wheat.vercel.app
+
 # Author
 
 Rajkumar Kalapala
