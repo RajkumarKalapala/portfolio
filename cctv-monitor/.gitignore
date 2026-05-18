@@ -52,12 +52,11 @@ htmlcov/
 # Uploaded/generated media
 uploads/
 recordings/
-screenshots/
-snapshots/
+
+
 *.mp4
 *.avi
 *.jpg
-*.png
 
 # Node modules (if frontend later uses npm)
 node_modules/
