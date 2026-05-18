@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge&logo=opencv">
 </p>
 
-<p align="center">
+<p>
   A cybersecurity-focused desktop application designed to monitor, control,
   and protect webcam privacy using scheduling, face registration,
   activity logging, and security alerts.
