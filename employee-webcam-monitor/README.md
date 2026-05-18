@@ -1,103 +1,248 @@
 # Webcam Spyware Security System
-**Supraja Technologies | Cyber Security Internship Project**
+
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Cybersecurity](https://img.shields.io/badge/Domain-Cybersecurity-red)
+![OpenCV](https://img.shields.io/badge/OpenCV-Enabled-green)
+![Desktop App](https://img.shields.io/badge/Application-Desktop-darkgreen)
+![Status](https://img.shields.io/badge/Project-Completed-success)
+
+A cybersecurity-focused desktop application designed to monitor, control, and protect webcam privacy using scheduling, face registration, activity logging, and security monitoring.
 
 ---
 
-## Overview
-A Python/Tkinter desktop application that provides physical security control
-over a Windows webcam using the Windows Registry, with:
-- Camera Enable / Disable via HKLM registry
-- Privacy Schedules (auto-block at specified times)
-- Face Recognition enrollment
-- Activity Log viewer
-- Admin / User role management
-- Dark-themed professional GUI
+# Project Overview
+
+The Webcam Spyware Security System is a privacy and security-oriented desktop application built to help users monitor webcam activity, control unauthorized access, and automate privacy protection using schedules and face registration mechanisms.
+
+The system simulates real-world webcam protection and monitoring concepts commonly used in cybersecurity and endpoint security applications.
 
 ---
 
-## Project Structure
-```
-webcam_security/
-├── main.py            ← Launch this file (GUI + all features)
-├── database.py        ← SQLite: logs, schedules, users, faces
-├── camera_control.py  ← Windows Registry webcam control
-├── scheduler.py       ← Background privacy schedule thread
-├── requirements.txt
-└── README.md
+# Key Features
+
+- Enable / Disable webcam access
+- Privacy scheduling system
+- Face registration functionality
+- Webcam monitoring controls
+- Security event logging
+- Activity tracking
+- Automated privacy protection
+- User-friendly desktop interface
+- Security-focused dark UI
+
+---
+
+# Main Dashboard
+
+The primary control panel for managing webcam security and privacy operations.
+
+![Main Dashboard](screenshots/01_main_dashboard.png)
+
+---
+
+# Webcam Monitoring Enabled
+
+Demonstrates active webcam access and monitoring functionality.
+
+![Camera Enabled](screenshots/02_camera_enabled.png)
+
+---
+
+# Webcam Protection / Disabled State
+
+Shows webcam blocking and privacy protection functionality.
+
+![Camera Disabled](screenshots/03_camera_disabled.png)
+
+---
+
+# Face Registration System
+
+Allows users to register authorized faces for security verification and monitoring.
+
+![Face Registration](screenshots/04_face_registration.png)
+
+---
+
+# Security Activity Logs
+
+Displays webcam activity logs, monitoring records, and security events.
+
+![Security Logs](screenshots/05_security_logs.png)
+
+---
+
+# Privacy Schedule Configuration
+
+Users can configure automated webcam privacy schedules.
+
+![Schedule Configuration](screenshots/06_schedule_config.png)
+
+---
+
+# Privacy Scheduling System
+
+Shows active privacy schedules configured for automatic webcam protection.
+
+![Privacy Schedules](screenshots/07_privacy_schedules.png)
+
+---
+
+# Backend Execution
+
+Backend services and monitoring systems running successfully.
+
+![Backend Running](screenshots/08_backend_running.png)
+
+---
+
+# System Architecture
+
+High-level workflow and architecture of the Webcam Spyware Security System.
+
+![System Architecture](screenshots/09_system_architecture.png)
+
+---
+
+# Application Demo
+
+Animated demo showcasing the complete workflow of the system.
+
+![Demo](screenshots/10_demo.gif)
+
+---
+
+# Technology Stack
+
+## Programming Language
+
+- Python
+
+## GUI Framework
+
+- Tkinter
+
+## Computer Vision
+
+- OpenCV
+
+## Security Concepts
+
+- Webcam Monitoring
+- Privacy Protection
+- Access Control
+- Activity Logging
+
+## Storage
+
+- SQLite / Local Storage
+
+---
+
+# Workflow
+
+```text
+User
+ ↓
+Desktop GUI
+ ↓
+Webcam Controller
+ ↓
+Face Registration
+ ↓
+Privacy Scheduler
+ ↓
+Security Logs
+ ↓
+Monitoring System
 ```
 
 ---
 
-## Setup Instructions
+# Use Cases
 
-### 1. Install Python (3.10+)
-Download from https://python.org — make sure to check "Add Python to PATH".
-
-### 2. Install dependencies
-Open Command Prompt in the project folder:
-```
-pip install Pillow opencv-python
-```
-
-For face recognition (optional, harder to install):
-```
-pip install cmake dlib face-recognition
-```
-> If dlib fails, skip it. The app works without face recognition.
-
-### 3. Run as Administrator (REQUIRED for camera control)
-- Right-click `main.py` → "Run with Python" → OR
-- Open CMD as Administrator:
-  ```
-  python main.py
-  ```
+- Webcam privacy protection
+- Cybersecurity demonstrations
+- Endpoint monitoring simulations
+- Educational security projects
+- Unauthorized webcam access prevention
+- Privacy management automation
 
 ---
 
-## Default Login
-| Username | Password  | Role  |
-|----------|-----------|-------|
-| admin    | Admin@123 | Admin |
+# Future Improvements
+
+- AI-based threat detection
+- Cloud synchronization
+- Email/SMS alerts
+- Multi-user authentication
+- Advanced intrusion detection
+- Real-time notification system
+- Mobile companion dashboard
 
 ---
 
-## Features Map (matches Project Enhancements)
+# Folder Structure
 
-| # | Enhancement                        | Where in App                          |
-|---|------------------------------------|---------------------------------------|
-| 1 | Beginner-friendly GUI              | main.py – dark tkinter UI             |
-| 2 | Face Recognition                   | "Register Face" button → webcam popup |
-| 3 | Group Policy (Admin/User roles)    | database.py users table               |
-| 4 | Intruder Detection (snapshot)      | Face registration saves images        |
-| 5 | Schedule Webcam Access             | Privacy Schedules section             |
-| 6 | Activity Monitoring & Alert System | View Logs window                      |
-| 7 | Auto Password Generation + SMTP    | database.py hash_password + smtplib   |
-
----
-
-## How Camera Control Works
-The app writes to:
+```text
+Webcam-Spyware-Security-System/
+│
+├── screenshots/
+│   ├── 01_main_dashboard.png
+│   ├── 02_camera_enabled.png
+│   ├── 03_camera_disabled.png
+│   ├── 04_face_registration.png
+│   ├── 05_security_logs.png
+│   ├── 06_schedule_config.png
+│   ├── 07_privacy_schedules.png
+│   ├── 08_backend_running.png
+│   ├── 09_system_architecture.png
+│   └── 10_demo.gif
+│
+├── src/
+├── README.md
+└── requirements.txt
 ```
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\
-CapabilityAccessManager\ConsentStore\webcam
+
+---
+
+# Installation
+
+## Clone Repository
+
+```bash
+git clone <your-repository-url>
 ```
-- Value `Allow` → camera enabled system-wide
-- Value `Deny`  → camera disabled system-wide
 
-This requires **Administrator** privileges.
+## Navigate to Project
+
+```bash
+cd Webcam-Spyware-Security-System
+```
+
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Run Application
+
+```bash
+python main.py
+```
 
 ---
 
-## Privacy Schedules
-- Add schedules in HH:MM format (24-hour)
-- The background thread checks every 60 seconds
-- If current time is inside an active schedule, camera is auto-disabled
-- Example: 22:00 → 06:00 blocks camera overnight
+# Author
+
+Rajkumar Kalapala
+
+Cybersecurity & AI Enthusiast  
+Python Developer | Security Projects | Monitoring Systems
 
 ---
 
-## Project Information
-- **Project Name:** Web Cam Security from Spyware
-- **Company:** Supraja Technologies
-- **Duration:** 01-DEC-2025 to 31-DEC-2025
-- **Status:** Completed
+# License
+
+This project is created for educational and demonstration purposes.
