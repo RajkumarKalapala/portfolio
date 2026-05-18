@@ -211,7 +211,7 @@ Webcam-Spyware-Security-System/
 ## Clone Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/RajkumarKalapala/portfolio.git
 ```
 
 ## Navigate to Project
