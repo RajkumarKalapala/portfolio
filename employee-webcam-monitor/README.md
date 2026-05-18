@@ -1,16 +1,20 @@
 <h1 align="center">
-Webcam Spyware Security System
+  Webcam Spyware Security System
 </h1>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python">
 
-![Python](https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python)
-![Cybersecurity](https://img.shields.io/badge/Domain-Cybersecurity-red?style=for-the-badge&logo=hackthebox)
-![OpenCV](https://img.shields.io/badge/OpenCV-Computer_Vision-green?style=for-the-badge&logo=opencv)
+  <img src="https://img.shields.io/badge/Domain-Cybersecurity-red?style=for-the-badge&logo=hackthebox">
 
+  <img src="https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge&logo=opencv">
 </p>
 
-A cybersecurity-focused desktop application designed to monitor, control, and protect webcam privacy using scheduling, face registration, activity logging, and security monitoring.
+<p align="center">
+  A cybersecurity-focused desktop application designed to monitor, control,
+  and protect webcam privacy using scheduling, face registration,
+  activity logging, and security alerts.
+</p>
 
 ---
 
