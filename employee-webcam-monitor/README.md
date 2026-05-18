@@ -1,10 +1,16 @@
 # Webcam Spyware Security System
 
-![Python](https://img.shields.io/badge/Python-3.10-blue)
-![Cybersecurity](https://img.shields.io/badge/Domain-Cybersecurity-red)
-![OpenCV](https://img.shields.io/badge/OpenCV-Enabled-green)
-![Desktop App](https://img.shields.io/badge/Application-Desktop-darkgreen)
-![Status](https://img.shields.io/badge/Project-Completed-success)
+<h1 align="center">
+Webcam Spyware Security System
+</h1>
+
+<p align="center">
+
+![Python](https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python)
+![Cybersecurity](https://img.shields.io/badge/Domain-Cybersecurity-red?style=for-the-badge&logo=hackthebox)
+![OpenCV](https://img.shields.io/badge/OpenCV-Computer_Vision-green?style=for-the-badge&logo=opencv)
+
+</p>
 
 A cybersecurity-focused desktop application designed to monitor, control, and protect webcam privacy using scheduling, face registration, activity logging, and security monitoring.
 
