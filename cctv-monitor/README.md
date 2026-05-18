@@ -262,14 +262,14 @@ python app.py
 
 ---
 
-- Live Demo: https://cctv-monitoring-system-wheat.vercel.app
-
 # Author
 
 Rajkumar Kalapala
 
 Cybersecurity & AI Enthusiast  
 Python Developer | Monitoring Systems | Dashboard Engineering
+
+- Live Demo: https://cctv-monitoring-system-wheat.vercel.app
 
 ---
 
