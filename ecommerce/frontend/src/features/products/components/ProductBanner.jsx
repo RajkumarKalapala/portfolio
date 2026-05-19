@@ -1,50 +1,54 @@
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
 import MobileStepper from '@mui/material/MobileStepper';
 import { Box, useTheme } from '@mui/material';
-import { useState } from 'react';
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import { useState, useEffect, useRef } from 'react';
 
 export const ProductBanner = ({images}) => {
-
-    const theme=useTheme()
-
+    const theme = useTheme()
     const [activeStep, setActiveStep] = useState(0);
     const maxSteps = images.length;
+    const timerRef = useRef(null);
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
+    // Auto-play
+    useEffect(() => {
+        timerRef.current = setInterval(() => {
+            setActiveStep(prev => (prev + 1) % maxSteps);
+        }, 3000);
+        return () => clearInterval(timerRef.current);
+    }, [maxSteps]);
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const handleStepChange = (step) => {
-        setActiveStep(step);
-    };
-
-  return (
-    <>
-    <AutoPlaySwipeableViews style={{overflow:"hidden"}} width={'100%'} height={'100%'} axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={activeStep} onChangeIndex={handleStepChange} enableMouseEvents >
-        {
-        images.map((image,index) => (
-        <div key={index} style={{width:"100%",height:'100%'}}>
-            {
-            Math.abs(activeStep - index) <= 2 
-                ?
-                <Box component="img" sx={{width:'100%',objectFit:"contain"}} src={image} alt={'Banner Image'} />
-                :
-                    null
-            }
-        </div>
-        ))
-        }
-    </AutoPlaySwipeableViews>
-    <div style={{alignSelf:'center'}}>
-        <MobileStepper steps={maxSteps} position="static" activeStep={activeStep}/>
-    </div>
-    </>
-  )
-}
+    return (
+        <>
+            <Box sx={{ width: '100%', overflow: 'hidden', position: 'relative' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        transition: 'transform 0.5s ease',
+                        transform: `translateX(-${activeStep * 100}%)`,
+                        width: '100%',
+                    }}
+                >
+                    {images.map((image, index) => (
+                        <Box
+                            key={index}
+                            component="img"
+                            src={image}
+                            alt={`Banner ${index + 1}`}
+                            sx={{
+                                minWidth: '100%',
+                                width: '100%',
+                                objectFit: 'contain',
+                            }}
+                        />
+                    ))}
+                </Box>
+            </Box>
+            <div style={{ alignSelf: 'center' }}>
+                <MobileStepper
+                    steps={maxSteps}
+                    position="static"
+                    activeStep={activeStep}
+                />
+            </div>
+        </>
+    );
+};

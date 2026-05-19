@@ -2,13 +2,14 @@ const Review=require("../models/Review")
 
 exports.create=async(req,res)=>{
     try {
-        console.log(req.body);
-        const created=await new Review(req.body).populate({path:'user',select:"-password"})
+        // FIX: save first, then populate (same bug as Cart)
+        const created=new Review(req.body)
         await created.save()
-        res.status(201).json(created)
+        const populated=await created.populate({path:'user',select:"-password"})
+        res.status(201).json(populated)
     } catch (error) {
         console.log(error);
-        return res.status(500).json({message:'Error posting review, please trying again later'})
+        return res.status(500).json({message:'Error posting review, please try again later'})
     }
 }
 
@@ -21,15 +22,15 @@ exports.getByProductId=async(req,res)=>{
         if(req.query.page && req.query.limit){
             const pageSize=req.query.limit
             const page=req.query.page
-
             skip=pageSize*(page-1)
             limit=pageSize
         }
 
         const totalDocs=await Review.find({product:id}).countDocuments().exec()
-        const result=await Review.find({product:id}).skip(skip).limit(limit).populate('user').exec()
+        // FIX: select -password so password hash is never sent to client
+        const result=await Review.find({product:id}).skip(skip).limit(limit).populate({path:'user',select:'-password'}).exec()
 
-        res.set("X-total-Count",totalDocs)
+        res.set("X-Total-Count",totalDocs)
         res.status(200).json(result)
 
     } catch (error) {
@@ -41,7 +42,7 @@ exports.getByProductId=async(req,res)=>{
 exports.updateById=async(req,res)=>{
     try {
         const {id}=req.params
-        const updated=await Review.findByIdAndUpdate(id,req.body,{new:true}).populate('user')
+        const updated=await Review.findByIdAndUpdate(id,req.body,{new:true}).populate({path:'user',select:'-password'})
         res.status(200).json(updated)
     } catch (error) {
         console.log(error);

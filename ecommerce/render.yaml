@@ -1,0 +1,17 @@
+services:
+  # Backend API on Render
+  - type: web
+    name: mern-ecommerce-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: PRODUCTION
+        value: true
+      - key: NODE_ENV
+        value: production
+      # Set these in Render dashboard:
+      # MONGO_URI, JWT_SECRET, SECRET_KEY, ORIGIN, FRONTEND_URL, EMAIL, PASSWORD

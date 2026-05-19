@@ -1,5 +1,5 @@
-import {Button, FormHelperText, Paper, Stack, TextField, Typography } from '@mui/material'
-import React, { useEffect} from 'react'
+import {FormHelperText, Paper, Stack, TextField, Typography } from '@mui/material'
+import React, { useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearOtpVerificationError, clearResendOtpError, clearResendOtpSuccessMessage, resendOtpAsync, resetOtpVerificationStatus, resetResendOtpStatus, selectLoggedInUser, selectOtpVerificationError, selectOtpVerificationStatus, selectResendOtpError, selectResendOtpStatus, selectResendOtpSuccessMessage, verifyOtpAsync } from '../AuthSlice'
 import { LoadingButton } from '@mui/lab'
@@ -19,6 +19,10 @@ export const OtpVerfication = () => {
     const resendOtpSuccessMessage=useSelector(selectResendOtpSuccessMessage)
     const otpVerificationStatus=useSelector(selectOtpVerificationStatus)
     const otpVerificationError=useSelector(selectOtpVerificationError)
+
+    // FIX: OTP form is always shown (OTP auto-sent on signup)
+    // User can also resend if needed
+    const [otpSent, setOtpSent] = useState(true)
 
     // handles the redirection
     useEffect(()=>{
@@ -54,6 +58,7 @@ export const OtpVerfication = () => {
     useEffect(()=>{
         if(resendOtpSuccessMessage){
             toast.success(resendOtpSuccessMessage.message)
+            setOtpSent(true)
         }
         return ()=>{
             dispatch(clearResendOtpSuccessMessage())
@@ -83,35 +88,41 @@ export const OtpVerfication = () => {
   return (
     <Stack width={'100vw'} height={'100vh'} noValidate flexDirection={'column'} rowGap={3} justifyContent="center" alignItems="center" >
 
-        
-        <Stack component={Paper} elevation={1} position={'relative'} justifyContent={'center'} alignItems={'center'} p={'2rem'} rowGap={'2rem'}>
+        <Stack component={Paper} elevation={1} position={'relative'} justifyContent={'center'} alignItems={'center'} p={'2rem'} rowGap={'2rem'} minWidth={'320px'}>
             
-            <Typography mt={4} variant='h5' fontWeight={500}>Verify Your Email Address</Typography>
+            <Typography mt={2} variant='h5' fontWeight={500}>Verify Your Email Address</Typography>
 
-            {
-                resendOtpStatus==='fullfilled'?(
-                    <Stack width={'100%'} rowGap={'1rem'} component={'form'} noValidate onSubmit={handleSubmit(handleVerifyOtp)}>
-                        <Stack rowGap={'1rem'}> 
-                            <Stack>
-                                <Typography  color={'GrayText'}>Enter the 4 digit OTP sent on</Typography>
-                                <Typography fontWeight={'600'} color={'GrayText'}>{loggedInUser?.email}</Typography>
-                            </Stack>
-                            <Stack>
-                                <TextField {...register("otp",{required:"OTP is required",minLength:{value:4,message:"Please enter a 4 digit OTP"}})} fullWidth type='number' />
-                                {errors?.otp && <FormHelperText sx={{color:"red"}}>{errors.otp.message}</FormHelperText>}
-                            </Stack>
-                       </Stack>
-                        <LoadingButton loading={otpVerificationStatus==='pending'}  type='submit' fullWidth variant='contained'>Verify</LoadingButton>
+            <Stack width={'100%'} rowGap={'1rem'} component={'form'} noValidate onSubmit={handleSubmit(handleVerifyOtp)}>
+                <Stack rowGap={'1rem'}> 
+                    <Stack>
+                        <Typography color={'GrayText'}>Enter the 4-digit OTP sent to</Typography>
+                        <Typography fontWeight={'600'} color={'GrayText'}>{loggedInUser?.email}</Typography>
                     </Stack>
-                ):
-                <>
-                <Stack>
-                    <Typography color={'GrayText'}>We will send you a OTP on</Typography>
-                    <Typography fontWeight={'600'} color={'GrayText'}>{loggedInUser?.email}</Typography>
-                </Stack>
-                <LoadingButton onClick={handleSendOtp} loading={resendOtpStatus==='pending'} fullWidth variant='contained'>Get OTP</LoadingButton>
-                </>
-             }
+                    <Stack>
+                        <TextField 
+                            {...register("otp",{
+                                required:"OTP is required",
+                                minLength:{value:4,message:"Please enter a 4 digit OTP"},
+                                maxLength:{value:4,message:"OTP must be exactly 4 digits"}
+                            })} 
+                            fullWidth 
+                            type='number'
+                            placeholder="Enter 4-digit OTP"
+                        />
+                        {errors?.otp && <FormHelperText sx={{color:"red"}}>{errors.otp.message}</FormHelperText>}
+                    </Stack>
+               </Stack>
+                <LoadingButton loading={otpVerificationStatus==='pending'} type='submit' fullWidth variant='contained'>Verify OTP</LoadingButton>
+                <LoadingButton 
+                    onClick={handleSendOtp} 
+                    loading={resendOtpStatus==='pending'} 
+                    fullWidth 
+                    variant='outlined'
+                    size="small"
+                >
+                    Resend OTP
+                </LoadingButton>
+            </Stack>
 
         </Stack>
     </Stack>

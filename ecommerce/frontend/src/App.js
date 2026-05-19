@@ -18,10 +18,8 @@ function App() {
   const isAuthChecked=useSelector(selectIsAuthChecked)
   const loggedInUser=useSelector(selectLoggedInUser)
 
-
   useAuthCheck();
   useFetchLoggedInUserDetails(loggedInUser);
-
 
   const routes = createBrowserRouter(
     createRoutesFromElements(
@@ -36,7 +34,6 @@ function App() {
 
         {
           loggedInUser?.isAdmin?(
-            // admin routes
             <>
             <Route path='/admin/dashboard' element={<Protected><AdminDashboardPage/></Protected>}/>
             <Route path='/admin/product-update/:id' element={<Protected><ProductUpdatePage/></Protected>}/>
@@ -45,7 +42,6 @@ function App() {
             <Route path='*' element={<Navigate to={'/admin/dashboard'}/>}/>
             </>
           ):(
-            // user routes
             <>
             <Route path='/' element={<Protected><HomePage/></Protected>}/>
             <Route path='/cart' element={<Protected><CartPage/></Protected>}/>
@@ -64,8 +60,12 @@ function App() {
     )
   )
 
-  
-  return isAuthChecked ? <RouterProvider router={routes}/> : "";
+  // FIX: show loading spinner instead of blank screen while auth is being checked
+  return isAuthChecked ? <RouterProvider router={routes}/> : (
+    <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh'}}>
+      <div style={{fontSize:'1.2rem',color:'#666'}}>Loading...</div>
+    </div>
+  );
 }
 
 export default App;
