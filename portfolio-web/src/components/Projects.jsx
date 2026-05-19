@@ -11,7 +11,7 @@ const projects = [
       "A private, local AI chatbot that lets users upload any document and ask questions — no data leaves the machine. Built for businesses that need document intelligence without cloud dependency.",
     impact: "Eliminates hours of manual document reading; works entirely offline.",
     tech: ["Python", "LangChain", "ChromaDB", "FastAPI", "Docker", "Ollama"],
-    github: "https://github.com/RajkumarKalapala/portfolio/ai-document-chatbot",
+    github: "https://github.com/RajkumarKalapala/portfolio/",
     demo: null,
   },
   {
@@ -24,7 +24,7 @@ const projects = [
       "Centralised web platform for monitoring city-wide SIM-based CCTV cameras with real-time online/offline status, geo-map visualisation, ticketing system, and role-based access control.",
     impact: "Reduced camera downtime response time by giving IT teams a single pane of glass.",
     tech: ["Python", "Flask", "SQLite", "HTML5", "JavaScript", "Chart.js"],
-    github: "https://github.com/RajkumarKalapala/portfolio/cctv-monitor",
+    github: "https://github.com/RajkumarKalapala/portfolio/",
     demo: "cctv-monitoring-system-wheat.vercel.app",
     featured: true,
   },
@@ -38,7 +38,7 @@ const projects = [
       "Automated employee activity tracking system using computer vision. Detects presence, motion, and attendance patterns — designed for remote team oversight without complex hardware.",
     impact: "Automates manual attendance logging and provides activity analytics.",
     tech: ["Python", "OpenCV", "Flask", "SQLite"],
-    github: "https://github.com/RajkumarKalapala/portfolio/employee-webcam-monitor",
+    github: "https://github.com/RajkumarKalapala/portfolio/",
     demo: null,
   },
   {
@@ -51,7 +51,7 @@ const projects = [
       "A suite of Linux security scripts: firewall panic mode, system info grabber, IP log parser, and an all-in-one super-tool for rapid incident response on Linux servers.",
     impact: "Cuts incident response setup time from minutes to seconds on any Linux host.",
     tech: ["Bash", "Linux", "iptables", "grep/awk"],
-    github: "https://github.com/RajkumarKalapala/portfolio/Security-bash-scripts",
+    github: "https://github.com/RajkumarKalapala/portfolio/",
     demo: null,
   },
   {
@@ -64,7 +64,7 @@ const projects = [
       "Real-time USB device detection and logging tool that alerts administrators when unauthorised storage devices are connected — useful for endpoint security in corporate environments.",
     impact: "Provides a lightweight layer of data exfiltration protection with zero infrastructure.",
     tech: ["Python", "Linux", "udev", "SQLite"],
-    github: "https://github.com/RajkumarKalapala/portfolio/usb-device-monitor",
+    github: "https://github.com/RajkumarKalapala/portfolio/",
     demo: null,
   },
 ];
