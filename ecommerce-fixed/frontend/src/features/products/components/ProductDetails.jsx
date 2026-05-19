@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { clearSelectedProduct, fetchProductByIdAsync, resetProductFetchStatus, selectProductFetchStatus, selectSelectedProduct } from '../ProductSlice'
-import { Box, Checkbox, Rating, Stack, Typography, useMediaQuery, Button, Paper } from '@mui/material'
+import { Box, Checkbox, Rating, Stack, Typography, useMediaQuery, Button } from '@mui/material'
 import { addToCartAsync, resetCartItemAddStatus, selectCartItemAddStatus, selectCartItems } from '../../cart/CartSlice'
 import { selectLoggedInUser } from '../../auth/AuthSlice'
 import { fetchReviewsByProductIdAsync, resetReviewFetchStatus, selectReviewFetchStatus, selectReviews } from '../../review/ReviewSlice'
@@ -58,7 +58,7 @@ const AutoCarousel = ({ images, autoPlay = true }) => {
                             key={index}
                             component="img"
                             src={image}
-                            alt={`Product image ${index + 1}`}
+                            alt={`Product ${index + 1}`}
                             sx={{ minWidth: '100%', width: '100%', objectFit: 'contain', aspectRatio: '1/1', overflow: 'hidden' }}
                         />
                     ))}
@@ -228,7 +228,7 @@ export const ProductDetails = () => {
                                     {!is1420 && <Stack sx={{ display: "flex", rowGap: '1.5rem', height: "100%", overflowY: "scroll" }}>
                                         {product && product.images.map((image, index) => (
                                             <motion.div key={index} whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }} style={{ width: "200px", cursor: "pointer" }} onClick={() => setSelectedImageIndex(index)}>
-                                                <img style={{ width: "100%", objectFit: "contain" }} src={image} alt={`${product.title} image`} />
+                                                <img style={{ width: "100%", objectFit: "contain" }} src={image} alt={product?.title} />
                                             </motion.div>
                                         ))}
                                     </Stack>}
@@ -241,7 +241,7 @@ export const ProductDetails = () => {
                                             </Stack>
                                             :
                                             <div style={{ width: "100%" }}>
-                                                <img style={{ width: "100%", objectFit: "contain", aspectRatio: '1/1' }} src={product?.images[selectedImageIndex]} alt={`${product?.title} image`} />
+                                                <img style={{ width: "100%", objectFit: "contain", aspectRatio: '1/1' }} src={product?.images[selectedImageIndex]} alt={product?.title} />
                                             </div>
                                         }
                                     </Stack>

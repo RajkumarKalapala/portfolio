@@ -11,7 +11,7 @@ export const ReviewItem = ({id,username,userid,comment,rating,createdAt}) => {
 
   const dispatch=useDispatch()
   const loggedInUser=useSelector(selectLoggedInUser)
-  const {register,handleSubmit,formState: { errors }} = useForm()
+  const {register,handleSubmit} = useForm()
   const [edit,setEdit]=useState(false)
   const [editRating,setEditRating]=useState(rating)
   const theme=useTheme()

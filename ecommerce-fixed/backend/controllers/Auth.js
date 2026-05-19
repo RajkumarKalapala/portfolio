@@ -74,6 +74,34 @@ exports.login=async(req,res)=>{
 
         if(existingUser && (await bcrypt.compare(req.body.password,existingUser.password))){
 
+            // Block login if email not verified — resend OTP automatically
+            if(!existingUser.isVerified){
+                const secureInfo=sanitizeUser(existingUser)
+                const token=generateToken(secureInfo)
+                setAuthCookie(res, token)
+
+                // Resend a fresh OTP
+                await Otp.deleteMany({user:existingUser._id})
+                const otp=generateOTP()
+                const hashedOtp=await bcrypt.hash(otp,10)
+                const newOtp=new Otp({
+                    user:existingUser._id,
+                    otp:hashedOtp,
+                    expiresAt:Date.now()+parseInt(process.env.OTP_EXPIRATION_TIME || 120000)
+                })
+                await newOtp.save()
+                console.log(`\n📧 OTP for ${existingUser.email}: ${otp}\n`)
+                try {
+                    await sendMail(
+                        existingUser.email,
+                        `OTP Verification for Your Account`,
+                        `Your One-Time Password (OTP) for account verification is: <b>${otp}</b>.<br/>Do not share this OTP with anyone for security reasons.`
+                    )
+                } catch(e){ console.log('Email error:',e.message) }
+
+                return res.status(200).json(sanitizeUser(existingUser))
+            }
+
             const secureInfo=sanitizeUser(existingUser)
             const token=generateToken(secureInfo)
             setAuthCookie(res, token)
