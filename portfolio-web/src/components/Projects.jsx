@@ -25,7 +25,7 @@ const projects = [
     impact: "Reduced camera downtime response time by giving IT teams a single pane of glass.",
     tech: ["Python", "Flask", "SQLite", "HTML5", "JavaScript", "Chart.js"],
     github: "https://github.com/RajkumarKalapala/portfolio/",
-    demo: "cctv-monitoring-system-wheat.vercel.app",
+    demo: "https://cctv-monitoring-system-wheat.vercel.app/",
     featured: true,
   },
   {
